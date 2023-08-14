@@ -1,11 +1,11 @@
-const express = require("express");
+const express = require('express');
 
-const { getProfile } = require("./middleware/getProfile");
+const { getProfile } = require('./middleware/getProfile');
 
 const { getContractById, getContracts } = require('./controllers/contracts');
 const { getUnpaidJobs, payForJob } = require('./controllers/jobs');
 const { addBalance } = require('./controllers/balance');
-const { bestClients, bestProfession } = require("./controllers/admin");
+const { bestClients, bestProfession } = require('./controllers/admin');
 
 const router = express.Router();
 

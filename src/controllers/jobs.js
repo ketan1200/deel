@@ -1,9 +1,8 @@
 const Models = require('../model');
 
 async function getUnpaidJobs(req, res) {
-
-  const profile = req.profile;
-  const profileId = profile.id
+  const { profile } = req;
+  const profileId = profile.id;
   const userCondition = profile.type === 'client' ? 'ClientId' : 'ContractorId';
 
   try {
@@ -13,29 +12,25 @@ async function getUnpaidJobs(req, res) {
         model: Models.Contract,
         attributes: [],
         where: {
-          status: "in_progress",
-          [userCondition]: profileId
-        }
-      }]
+          status: 'in_progress',
+          [userCondition]: profileId,
+        },
+      }],
     });
     return res.status(200).json(data);
-
   } catch (error) {
     return res.status(500).json({ error: 'Something went wrong, Please try again later' });
   }
-
 }
 
 async function payForJob(req, res) {
-
   let DBTransaction;
 
-  const profile = req.profile;
+  const { profile } = req;
   const jobId = req.params.job_id;
   const profileId = req.profile.id;
 
   try {
-
     if (profile.type !== 'client') return res.status(400).json({ message: 'Invalid Request' });
 
     const jobDetails = await Models.Job.findOne({
@@ -44,8 +39,8 @@ async function payForJob(req, res) {
         attributes: ['ContractorId'],
         model: Models.Contract,
         where: {
-          "ClientId": profileId
-        }
+          ClientId: profileId,
+        },
       }],
     });
 
@@ -71,20 +66,16 @@ async function payForJob(req, res) {
 
     await DBTransaction.commit();
 
-    res.status(200).send(jobDetails);
-
+    return res.status(200).send(jobDetails);
   } catch (error) {
-
     if (DBTransaction) DBTransaction.rollback();
 
     let message = 'Something went wrong, Please try again later';
 
-    if (error?.parent?.code === 'SQLITE_BUSY') message = 'Request already in-progress, Please try again after sometime.'
+    if (error?.parent?.code === 'SQLITE_BUSY') message = 'Request already in-progress, Please try again after sometime.';
 
     return res.status(500).json({ message });
-
   }
-
 }
 
 module.exports = { getUnpaidJobs, payForJob };

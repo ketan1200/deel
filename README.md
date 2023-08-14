@@ -1,3 +1,38 @@
+// What can Implement / Improve
+
+* Technologies can Use || Better user experience
+=> Graphql Better way to handle req & res and prevent unused data parsing in network 
+=> RabbitMQ / Kafka for trigger email of job payment ( Client & contractor both get notified )
+
+* Documentation
+=> Swagger for Rest API Documentation.
+
+Error Handling
+=> Implement Logger for log req & res. 
+=> Implement Sentry / Slack Alert for better error handling. 
+=> Implement Request limit for client requests
+
+Alternate solution
+=> For handle concurrency we can implement redis for at a time single payment request can process, as of now Implement LOCK row
+
+# Command 
+
+* Start Application 
+  
+  npm run start / yarn run start
+
+* Run seed
+
+  npm run seed / yarn run seed
+
+* Lint
+
+    npm run lint / yarn run lint
+
+* Fix lint issue automatically
+
+    npm run lint:fix / yarn run lint:fix
+
 # DEEL BACKEND TASK
 
 💫 Welcome! 🎉

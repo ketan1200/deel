@@ -1,9 +1,27 @@
+const Models = require('../model');
 
 const getProfile = async (req, res, next) => {
-    const {Profile} = req.app.get('models')
-    const profile = await Profile.findOne({where: {id: req.get('profile_id') || 0}})
-    if(!profile) return res.status(401).end()
+
+  try {
+
+    const profileId = req.headers.profile_id;
+
+    if (!profileId) return res.status(400).send({ message: 'Please provide valid Profile Id' })
+
+    const profile = await Models.Profile.findOne({ where: { id: profileId }, raw: true });
+
+    if (!profile) return res.status(401).send({ message: 'Profiles does not exist' });
+
     req.profile = profile
-    next()
+
+    return next();
+
+  } catch (err) {
+
+    return res.status(500).send({ message: 'Something went wrong, Please try again later' });
+
+  }
+
 }
-module.exports = {getProfile}
+module.exports = { getProfile }
+

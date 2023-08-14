@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -86,5 +87,6 @@ module.exports = {
   sequelize,
   Profile,
   Contract,
-  Job
+  Job,
+  Op
 };

@@ -1,7 +1,7 @@
 const Models = require('../model');
 const Op = Models.Op;
 
-async function bestContractors(req, res) {
+async function bestProfession(req, res) {
 
   try {
 
@@ -10,36 +10,31 @@ async function bestContractors(req, res) {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
 
-    const jobs = await Models.Job.findAll({
-      attributes: [[Models.sequelize.fn('sum', Models.sequelize.col('price')), 'totalPrice'], "profession"],
+    const result = await Models.Job.findAll({
+      attributes : [[Models.sequelize.fn('sum', Models.sequelize.col('price')), 'paid'], 'Contract.Contractor.profession'],
       where: {
         paid: true,
-        paymentDate: { [Op.between]: [startDate, endDate] }
+        paymentDate: { [Op.between]: [startDate, endDate] },
       },
       include: [{
-        attributes: [],
         model: Models.Contract,
+        attributes:[],
         include: [{
-          attributes: [],
           model: Models.Profile,
+          as: 'Contractor',
+          attributes:[],
         }],
       }],
-      group: ['profession'],
-      order: [[Models.sequelize.fn('sum', Models.sequelize.col('totalPrice')), 'DESC']]
-    });
-
-    if (!jobs) return res.status(200).json({ total_income: 0 });
-
-    const contractorDetails = await Models.Profile.findOne({
-      where: {
-        id: jobs['Contract.ContractorId']
-      },
       raw: true,
+      group: ['Contract.Contractor.profession'],
+      order: [[Models.sequelize.fn('sum', Models.sequelize.col('price')), 'DESC']],
+      limit:1
     });
 
-    return res.status(200).json({ ...contractorDetails, total_income: jobs.total_income });
+    res.status(200).send(result);
 
   } catch (err) {
+    
     console.log(err);
     return res.status(500).json({ message: 'Something went wrong, Please try again later' });
   }
@@ -88,4 +83,4 @@ async function bestClients(req, res) {
   }
 }
 
-module.exports = { bestContractors, bestClients };
+module.exports = { bestProfession, bestClients };

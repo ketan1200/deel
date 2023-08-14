@@ -5,7 +5,7 @@ const { getProfile } = require("./middleware/getProfile");
 const { getContractById, getContracts } = require('./controllers/contracts');
 const { getUnpaidJobs, payForJob } = require('./controllers/jobs');
 const { addBalance } = require('./controllers/balance');
-const { bestClients, bestContractors } = require("./controllers/admin");
+const { bestClients, bestProfession } = require("./controllers/admin");
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.get('/jobs/:job_id/pay', getProfile, payForJob);
 
 router.post('/balances/deposit/:userId', getProfile, addBalance);
 
-router.get('/admin/best-profession', bestContractors);
+router.get('/admin/best-profession', bestProfession);
 
 router.get('/admin/best-clients', bestClients);
 

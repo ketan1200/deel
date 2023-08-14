@@ -34,8 +34,6 @@ async function bestProfession(req, res) {
     res.status(200).send(result);
 
   } catch (err) {
-    
-    console.log(err);
     return res.status(500).json({ message: 'Something went wrong, Please try again later' });
   }
 
@@ -50,8 +48,6 @@ async function bestClients(req, res) {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
     const limit = req.query.limit || 2;
-
-    console.log(startDate, endDate);
 
     const jobs = await Models.Job.findAll({
       as: 'Job',

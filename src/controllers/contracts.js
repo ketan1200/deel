@@ -9,8 +9,6 @@ async function getContractById(req, res) {
 
   try {
 
-    console.log(profileId, contractId);
-
     const contract = await Models.Contract.findOne({ where: { id: contractId, clientId: profileId } });
 
     if (!contract) return res.status(404).json({ message: "Invalid Contractor id" });
@@ -18,8 +16,6 @@ async function getContractById(req, res) {
     return res.json(contract);
 
   } catch (error) {
-
-    console.log('error', error);
 
     return res.status(500).send({ message: 'Something went wrong, Please try again later' });
 
